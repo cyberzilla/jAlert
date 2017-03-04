@@ -2,12 +2,20 @@
 
 GitHub Project Link : http://cyberzilla.github.io/jAlert
 
+
 I am not the author of this plugin. I just found it somewhere and thought it can be helpful for people like me!
 
 This is just an fork of the work from (http://rajkumarpb.github.io/jAlert)
 Since it isn't available in github and replaced with better one, I thought of put it here.
 
 Original Source From http://labs.abeautifulsite.net/archived/jquery-alerts/
+
+
+
+Demo Page
+======
+http://cyberzilla.github.io/jAlert/demo.html
+
 
 
 Setup
