@@ -97,7 +97,6 @@
 		// Private methods
 		_validateForm: function(){
 			$.validator.setDefaults({
-				focusInvalid: false,
 				highlight: function(element) {
 					$(element).closest('.form-group').addClass('has-error');
 				},
@@ -114,6 +113,7 @@
 					}
 				}
 		  });
+
 		},
 
 		_show: function(title, msg, value, type, callback) {
@@ -241,16 +241,48 @@
 						if( e.keyCode == 13 ) $("#popup_ok").trigger('click');
 						if( e.keyCode == 27 ) $("#popup_cancel").trigger('click');
 					});
+
 				break;
 			}
 
 			// Make draggable
 			if( $.alerts.draggable ) {
-				try {
-					$("#popup_container").draggable({ handle: $("#popup_title") });
-					$("#popup_title"+$.alerts.theme).css({ cursor: 'move' });
-				} catch(e) { /* requires jQuery UI draggables */ }
+			    $.alerts._draggable("#popup_container");
+			    $("#popup_title"+$.alerts.theme).css({ cursor: 'move' });
 			}
+		},
+
+		_draggable : function(elem){
+		    var $this = $(elem),
+		    $handle = $this.find("#popup_title"+$.alerts.theme),
+            ns = 'draggable_'+(Math.random()+'').replace('.',''),
+            mm = 'mousemove.'+ns,
+            mu = 'mouseup.'+ns,
+            $w = $(window),
+            isFixed = ($this.css('position') === 'fixed'),
+            adjX = 0, adjY = 0;
+
+            $handle.mousedown(function(ev){
+                var pos = $this.offset();
+                if (isFixed) {
+                    adjX = $w.scrollLeft(); adjY = $w.scrollTop();
+                }
+                var ox = (ev.pageX - pos.left), oy = (ev.pageY - pos.top);
+                $this.data(ns,{ x : ox, y: oy });
+                $w.on(mm, function(ev){
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    if (isFixed) {
+                        adjX = $w.scrollLeft(); adjY = $w.scrollTop();
+                    }
+                    var offset = $this.data(ns);
+                    $this.css({left: ev.pageX - adjX - offset.x, top: ev.pageY - adjY - offset.y});
+                });
+                $w.on(mu, function(){
+                    $w.off(mm + ' ' + mu).removeData(ns);
+                });
+            });
+            return this;
 		},
 
 		_hide: function() {
