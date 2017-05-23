@@ -221,6 +221,7 @@
 
 					$(".button-close").click(function(){
 						$.alerts._hide();
+						if( callback ) callback(false);
 					});
 
 					$("#popup_ok").click(function(e){
